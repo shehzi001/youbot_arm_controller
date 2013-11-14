@@ -7,36 +7,7 @@
 #include "YoubotArmController.h"
 using namespace std;
 using namespace ros;
-/*
-class RobotArmController {
-public:
-	RobotArmController()
-	{
-		position_publisher = nh.advertise<brics_actuator::JointPositions>("arm_1/arm_controller/position_command",1);
-	}
-	~RobotArmController(){}
-	
-	void publishjointposition(std::vector<double> jointangles)
-	  { 
-		brics_actuator::JointPositions jointpositions;
-		jointpositions.positions.resize(jointangles.size());
-		
-		for (int i = 0;i < jointangles.size();i++)
-		{	std::stringstream jointname;
-			jointname.str("");
-			jointname << "arm_joint_" << (i + 1);
-			jointpositions.positions[i].joint_uri = jointname.str();
-			jointpositions.positions[i].unit = "rad";
-			jointpositions.positions[i].value = jointangles[i];
-		}
-		position_publisher.publish(jointpositions);
-	  }
-private:
-	ros::NodeHandle nh;
-	ros::Publisher position_publisher;
-	
-};
-*/
+
 int main(int argc,char **argv){
 	
 	ros::init(argc, argv,"robot_arm_controller");
@@ -55,7 +26,7 @@ int main(int argc,char **argv){
 	//rate.sleep();
 	while(nh.ok())
 	 {	
-		cout << "Select mode for Arm Position setting:Home(h),Candle(c) or Manual Setting(m)" << endl;
+		cout << "\nSelect mode for Arm Position setting:Home(h),Candle(c),Manual Input(m) or Exit(e)" << endl;
 		cin >> mode;	
 			if (mode == 'h')
 				{
@@ -73,11 +44,13 @@ int main(int argc,char **argv){
 					}
 					rac.publishjointposition(angles);
 				}
-			else
+			else if(mode == 'e')
 				{
-					cout << endl << "\nWrong mode selected." <<  endl;
+					cout << endl << "\nTerminating..." <<  endl;
 					break;
-				}			
+				}		
+			else 
+					cout << endl << "\nInvalid Input..." <<  endl;
 		rate.sleep();
 	}
 	
